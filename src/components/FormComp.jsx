@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Alert, Spinner, Badge, ProgressBar } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import NavbarComp from "./Navbar";
+import { useUsers } from "../context/UserContext";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -12,6 +14,8 @@ export default function FormComp() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
+  const { addUser } = useUsers();
+  const navigate = useNavigate();
 
   const validationSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -110,14 +114,20 @@ export default function FormComp() {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     console.log("Form Data:", JSON.stringify(data, null, 2));
+
+    // Add user to the context (which updates the table)
+    const newUser = addUser(data);
+    console.log("User added:", newUser);
+
     setIsSubmitting(false);
     setSubmitSuccess(true);
 
-    // Reset form after 3 seconds
+    // Reset form and redirect to home after 3 seconds
     setTimeout(() => {
       reset();
       setSubmitSuccess(false);
       setPasswordStrength(0);
+      navigate("/home");
     }, 3000);
   };
 
@@ -158,6 +168,11 @@ export default function FormComp() {
                     <i className="bi bi-check-circle-fill me-2"></i>
                     <strong>Success!</strong> Your account has been created
                     successfully!
+                    <br />
+                    <small>
+                      Redirecting to home page where you can see your profile in
+                      the users table...
+                    </small>
                   </Alert>
                 )}
 
