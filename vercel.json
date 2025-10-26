@@ -3,5 +3,5 @@
   "outputDirectory": "build",
   "framework": "create-react-app",
   "installCommand": "npm ci",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [{ "source": "/((?!static|.*\\..*).*)", "destination": "/index.html" }]
 }
