@@ -1,0 +1,7 @@
+{
+  "buildCommand": "npm ci && npm test -- --watchAll=false && npm run build",
+  "outputDirectory": "build",
+  "framework": "create-react-app",
+  "installCommand": "npm ci",
+  "routes": [{ "src": "/(.*)", "dest": "/index.html" }]
+}
